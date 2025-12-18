@@ -9,7 +9,7 @@ export const adminAuth = async (
     if ((req as any).user?.role === "admin") {
       next();
     } else {
-      throw { name: "Forbidden" };
+      throw { name: "Forbidden Access" };
     }
   } catch (err) {
     console.log(err);

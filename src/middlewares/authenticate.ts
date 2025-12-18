@@ -22,18 +22,18 @@ export const authentication = async (
   try {
     const access_token = req.headers.authorization;
     if (!access_token) {
-      throw { name: "Unauthorized" };
+      throw { name: "Unauthorized Access" };
     }
 
     const [bearer, token] = access_token.split(" ");
     if (bearer !== "Bearer") {
-      throw { name: "Unauthorized" };
+      throw { name: "Unauthorized Access" };
     }
 
     const payload = verifyToken(token);
     const user = await User.findByPk(payload.id);
     if (!user) {
-      throw { name: "Unauthorized" };
+      throw { name: "Unauthorized User" };
     }
 
     req.user = {
