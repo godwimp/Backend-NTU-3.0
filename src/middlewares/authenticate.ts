@@ -3,16 +3,16 @@ import { verifyToken } from "../helpers/jwt";
 import db from "../models";
 
 interface AuthenticatedRequest extends Request {
-    user?: {
-        id: any;
-        email: string;
-        role: string;
-        name: string;
-        username: string;
-    };
+  user?: {
+    id: any;
+    email: string;
+    role: string;
+    name: string;
+    username: string;
+  };
 }
 const { User } = db;
-
+const BEARER_PREFIX = "Bearer";
 
 export const authentication = async (
   req: AuthenticatedRequest,
@@ -26,7 +26,7 @@ export const authentication = async (
     }
 
     const [bearer, token] = access_token.split(" ");
-    if (bearer !== "Bearer") {
+    if (bearer !== BEARER_PREFIX) {
       throw { name: "Unauthorized Access" };
     }
 
