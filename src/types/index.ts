@@ -1,71 +1,49 @@
-export interface PanelAData {
-  id?: number;
-  timestamp: Date;
-  flow1: number;
-  turbidity: number;
-  ph: number;
-  tds: number;
-  createdAt?: Date;
-  updatedAt?: Date;
+interface BaseModelData {
+    id?: number;
+    timestamp: Date;
+    createdAt?: Date;
+    updatedAt?: Date;
 }
 
-export interface PanelBData {
-  id?: number;
-  timestamp: Date;
-  flow1: number;
-  turbidity: number;
-  ph: number;
-  tds: number;
-  createdAt?: Date;
-  updatedAt?: Date;
+interface WaterQualityMetrics {
+    flow1: number;
+    turbidity: number;
+    ph: number;
+    tds: number;
 }
 
-export interface PanelCData {
-  id?: number;
-  timestamp: Date;
-  level1: number;
-  level2: number;
-  createdAt?: Date;
-  updatedAt?: Date;
+interface LevelMetrics {
+    level1: number;
+    level2: number;
 }
 
-export interface PanelDData {
-  id?: number;
-  timestamp: Date;
-  level1: number;
-  level2: number;
-  createdAt?: Date;
-  updatedAt?: Date;
-}
+export interface PanelAData extends BaseModelData, WaterQualityMetrics {}
 
-export interface PanelEData {
-  id?: number;
-  timestamp: Date;
-  flow1: number;
-  turbidity: number;
-  ph: number;
-  tds: number;
-  createdAt?: Date;
-  updatedAt?: Date;
-}
+export interface PanelBData extends BaseModelData, WaterQualityMetrics {}
+
+export interface PanelCData extends BaseModelData, LevelMetrics {}
+
+export interface PanelDData extends BaseModelData, LevelMetrics {}
+
+export interface PanelEData extends BaseModelData, WaterQualityMetrics {}
 
 export interface UserAttributes {
-  id?: number;
-  name: string;
-  username: string;
-  email: string;
-  password: string;
-  role: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+    id?: number;
+    name: string;
+    username: string;
+    email: string;
+    password: string;
+    role: string;
+    createdAt?: Date;
+    updatedAt?: Date;
 }
 
 export interface JWTPayload {
-  id: number;
-  email: string;
-  role: string;
-  name: string;
-  username: string;
+    id: number;
+    email: string;
+    role: string;
+    name: string;
+    username: string;
 }
 
 export type TimeFilter = "daily" | "weekly" | "monthly";
