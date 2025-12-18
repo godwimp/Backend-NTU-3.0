@@ -4,11 +4,9 @@ import { JWTPayload } from "../types/index";
 const secret = process.env.JWT_SECRET as string;
 
 export const createToken = (payload: JWTPayload): string => {
-  const token = jwt.sign(payload, secret);
-  return token;
+   return jwt.sign(payload, secret);
 };
 
 export const verifyToken = (token: string): JWTPayload => {
-  const payload = jwt.verify(token, secret) as JWTPayload;
-  return payload;
+  return jwt.verify(token, secret) as JWTPayload;
 };
