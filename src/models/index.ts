@@ -54,11 +54,11 @@ const loadModels = (sequelize: Sequelize): void => {
 };
 
 const associateModels = (): void => {
-    Object.keys(db).forEach((modelName) => {
-        if (db[modelName].associate) {
-            db[modelName].associate(db);
-        }
-    });
+  Object.keys(db).forEach((modelName) => {
+    if (db[modelName].associate) {
+      db[modelName].associate(db);
+    }
+  });
 };
 
 const sequelize = initializeSequelize();
