@@ -45,15 +45,7 @@ A TypeScript-based Express backend for water monitoring system with real-time MQ
 npm install
 ```
 
-2. Create a `.env` file with the following variables:
-```env
-PORT=3006
-JWT_SECRET=your_jwt_secret
-MQTT_HOST=your_mqtt_host
-MQTT_PORT=8883
-MQTT_USERNAME=your_mqtt_username
-MQTT_PASSWORD=your_mqtt_password
-```
+2. Copy the `.env.example` file and rename it to `.env`, then match the configuration with your MQTT configuration.
 
 3. Configure database in `config/config.json`
 
