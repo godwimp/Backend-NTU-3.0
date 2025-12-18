@@ -7,40 +7,49 @@ import { TimeFilter } from "../types/index";
 const { PanelA, PanelB, PanelC, PanelD, PanelE } = db;
 
 export class DataController {
+  private static buildTimeFilter(filter?: TimeFilter): WhereOptions {
+    if (!filter) return {};
+
+    const filterMap: Record<TimeFilter, WhereOptions> = {
+      daily: {
+        createdAt: {
+          $gte: moment().startOf("day").toDate(),
+          $lte: moment().endOf("day").toDate(),
+        },
+      },
+      weekly: {
+        createdAt: {
+          $gte: moment().startOf("isoWeek").toDate(),
+          $lte: moment().endOf("isoWeek").toDate(),
+        },
+      },
+      monthly: {
+        createdAt: {
+          $gte: moment().startOf("month").toDate(),
+          $lte: moment().endOf("month").toDate(),
+        },
+      },
+    };
+
+    console.log(`${filter.charAt(0).toUpperCase() + filter.slice(1)} filter`);
+    return filterMap[filter] || {};
+  }
+
   static async getPanelData(
     req: Request,
     res: Response,
     panelModel: any
   ): Promise<void> {
     const { filter } = req.query as { filter?: TimeFilter };
-    console.log("Filter recieved: ", req.query);
-    let where: WhereOptions = {};
+    console.log("Filter received: ", req.query);
 
-    if (filter === "daily") {
-      console.log("Daily filter");
-      where.createdAt = {
-        $gte: moment().startOf("day").toDate(),
-        $lte: moment().endOf("day").toDate(),
-      };
-    } else if (filter === "weekly") {
-      console.log("Weekly filter");
-      where.createdAt = {
-        $gte: moment().startOf("isoWeek").toDate(),
-        $lte: moment().endOf("isoWeek").toDate(),
-      };
-    } else if (filter === "monthly") {
-      console.log("Monthly filter");
-      where.createdAt = {
-        $gte: moment().startOf("month").toDate(),
-        $lte: moment().endOf("month").toDate(),
-      };
-    }
+    const where = DataController.buildTimeFilter(filter);
 
     try {
       const data = await panelModel.findAll({ where });
       res.status(200).json(data);
     } catch (err: any) {
-      res.status(500).json({ error: err.message });
+      res.status(500).json({ err: err.message });
     }
   }
 
@@ -58,6 +67,7 @@ export class DataController {
       res.status(500).json({ error: err.message });
     }
   }
+
   static async getPanelA(req: Request, res: Response): Promise<void> {
     await DataController.getPanelData(req, res, PanelA);
   }
