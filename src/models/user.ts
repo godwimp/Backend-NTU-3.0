@@ -2,6 +2,11 @@ import { Model, DataTypes, Sequelize } from "sequelize";
 import { hashPassword } from "../helpers/bcrypt";
 import { UserAttributes } from "../types/index";
 
+const PASSWORD_REGEX = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$/i;
+const PASSWORD_MIN_LENGTH = 6;
+const PASSWORD_MAX_LENGTH = 24;
+
+
 class User extends Model<UserAttributes> implements UserAttributes {
   public id!: number;
   public name!: string;
@@ -17,7 +22,7 @@ class User extends Model<UserAttributes> implements UserAttributes {
   }
 }
 
-export default (sequelize: Sequelize) => {
+export default (sequelize: Sequelize): typeof User => {
   User.init(
     {
       name: {
@@ -78,11 +83,11 @@ export default (sequelize: Sequelize) => {
             msg: "Password is required",
           },
           len: {
-            args: [6, 100],
-            msg: "Password min 6 characters",
+            args: [PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH],
+            msg: `Password min ${PASSWORD_MIN_LENGTH} characters`,
           },
           is: {
-            args: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$/i,
+            args: PASSWORD_REGEX,
             msg: "Password must contain at least one uppercase letter, one lowercase letter, and one number",
           },
         },
