@@ -6,11 +6,11 @@ export const adminAuth = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    if ((req as any).user?.role === "admin") {
-      next();
-    } else {
+    const user = (req as any).user;
+    if (user?.role !== "admin") {
       throw { name: "Forbidden Access" };
     }
+    next();
   } catch (err) {
     console.log(err);
     next(err);
