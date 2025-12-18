@@ -18,6 +18,7 @@ export class UsersController {
         where: { email },
         attributes: { exclude: ["password"] },
       });
+      
       res.status(201).json(data);
     } catch (err) {
       next(err);
@@ -53,6 +54,7 @@ export class UsersController {
         name: user.name,
         username: user.username,
       });
+
       res.status(200).json({ access_token: token });
     } catch (err) {
       next(err);
