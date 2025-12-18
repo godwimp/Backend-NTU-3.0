@@ -1,0 +1,7 @@
+import httpServer from "../app";
+
+const port = process.env.PORT || 3006;
+
+httpServer.listen(port, () => {
+    console.log(`Server listening on PORT ${port}`);
+});
