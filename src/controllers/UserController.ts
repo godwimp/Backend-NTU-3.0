@@ -33,12 +33,12 @@ export class UsersController {
       const { email, password } = req.body;
       console.log(email, password);
       if (!email || !password) {
-        throw { name: "Invalid input" };
+        throw { name: "Invalid username or password." };
       }
 
       const user = await User.findOne({ where: { email } });
       if (!user) {
-        throw { name: "Invalid user" };
+        throw { name: "Invalid username or password." };
       }
 
       const isValidPassword = comparePassword(password, user.password);
