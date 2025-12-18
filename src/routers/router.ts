@@ -7,10 +7,10 @@ import dataRouter from "./data";
 const router = express.Router();
 
 router.get("/", (_req: Request, res: Response) => {
-    res.send("Hello World!");
+  res.send("Hello World!");
 });
 
-router.post("/register", authentication, adminAuth,UsersController.register);
+router.post("/register", authentication, adminAuth, UsersController.register);
 router.post("/login", UsersController.login);
 
 router.use("/data", dataRouter);

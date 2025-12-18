@@ -16,7 +16,7 @@ interface DB {
 const db: DB = {} as DB;
 
 let sequelize: Sequelize;
-console.log("config test",config);
+console.log("config test", config);
 if (config.use_env_variable) {
   sequelize = new Sequelize(
     process.env[config.use_env_variable] as string,
@@ -43,7 +43,10 @@ fs.readdirSync(__dirname)
   })
   .forEach((file) => {
     const importedModel = require(path.join(__dirname, file));
-    const model = (importedModel.default || importedModel)(sequelize, DataTypes);
+    const model = (importedModel.default || importedModel)(
+      sequelize,
+      DataTypes
+    );
     db[model.name] = model;
   });
 
