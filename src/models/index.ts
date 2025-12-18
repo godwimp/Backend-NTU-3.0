@@ -15,46 +15,55 @@ interface DB {
 
 const db: DB = {} as DB;
 
-let sequelize: Sequelize;
-console.log("config test", config);
-if (config.use_env_variable) {
-  sequelize = new Sequelize(
-    process.env[config.use_env_variable] as string,
-    config
-  );
-} else {
-  sequelize = new Sequelize(
+const initializeSequelize = (): Sequelize => {
+  if (config.use_env_variable) {
+    return new Sequelize(
+      process.env[config.use_env_variable] as string,
+      config
+    );
+  }
+  return new Sequelize(
     config.database,
     config.username,
     config.password,
     config
   );
-}
+};
 
-fs.readdirSync(__dirname)
-  .filter((file) => {
-    return (
-      file.indexOf(".") !== 0 &&
-      file !== basename &&
-      (file.slice(-3) === ".ts" || file.slice(-3) === ".js") &&
-      file.indexOf(".test.") === -1 &&
-      file.indexOf(".d.ts") === -1
-    );
-  })
-  .forEach((file) => {
-    const importedModel = require(path.join(__dirname, file));
-    const model = (importedModel.default || importedModel)(
-      sequelize,
-      DataTypes
-    );
-    db[model.name] = model;
-  });
+const isValidModelFile = (file: string): boolean => {
+  return (
+    file.indexOf(".") !== 0 &&
+    file !== basename &&
+    (file.endsWith(".ts") || file.endsWith(".js")) &&
+    !file.includes(".test.") &&
+    !file.endsWith(".d.ts")
+  );
+};
 
-Object.keys(db).forEach((modelName) => {
-  if (db[modelName].associate) {
-    db[modelName].associate(db);
-  }
-});
+const loadModels = (sequelize: Sequelize): void => {
+  fs.readdirSync(__dirname)
+    .filter(isValidModelFile)
+    .forEach((file) => {
+      const importedModel = require(path.join(__dirname, file));
+      const model = (importedModel.default || importedModel)(
+        sequelize,
+        DataTypes
+      );
+      db[model.name] = model;
+    });
+};
+
+const associateModels = (): void => {
+    Object.keys(db).forEach((modelName) => {
+        if (db[modelName].associate) {
+            db[modelName].associate(db);
+        }
+    });
+};
+
+const sequelize = initializeSequelize();
+loadModels(sequelize);
+associateModels();
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
